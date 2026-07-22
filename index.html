@@ -252,22 +252,29 @@
 
     .chart-count { color: var(--subtle); }
 
-    .preview-wrap {
-      overflow: hidden;
+    .cover {
       aspect-ratio: 16 / 9;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
       background: var(--surface);
       border-bottom: 1px solid var(--line);
+      transition: background-color 160ms ease;
     }
 
-    .preview {
-      display: block;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: transform 240ms ease;
+    .cover span {
+      font-size: 128px;
+      font-weight: 300;
+      line-height: 1;
+      letter-spacing: 0;
+      transition: transform 160ms ease;
     }
 
-    .market:hover .preview { transform: scale(1.012); }
+    .copper .cover span { color: var(--copper); }
+    .zinc .cover span { color: var(--zinc); }
+
+    .market:hover .cover { background: var(--surface-hover); }
+    .market:hover .cover span { transform: translateX(4px); }
 
     .market-body {
       min-height: 116px;
@@ -390,12 +397,14 @@
       .market-title h3 { font-size: 21px; }
       .market-title span { display: block; margin-top: 3px; }
       .meta { font-size: 11px; white-space: nowrap; }
+      .cover span { font-size: 88px; }
       .footer-inner { min-height: 80px; }
     }
 
     @media (prefers-reduced-motion: reduce) {
       .market,
-      .preview,
+      .cover,
+      .cover span,
       .arrow { transition: none; }
     }
   </style>
@@ -451,9 +460,7 @@
             <span class="market-id"><span class="swatch" aria-hidden="true"></span>01 / CU</span>
             <span class="chart-count">70 图表组</span>
           </div>
-          <div class="preview-wrap">
-            <img class="preview" src="assets/copper.webp" alt="铜数据面板图表预览" width="720" height="405" decoding="async">
-          </div>
+          <div class="cover" aria-hidden="true"><span>CU</span></div>
           <div class="market-body">
             <div>
               <div class="market-title">
@@ -471,9 +478,7 @@
             <span class="market-id"><span class="swatch" aria-hidden="true"></span>02 / ZN</span>
             <span class="chart-count">51 图表组</span>
           </div>
-          <div class="preview-wrap">
-            <img class="preview" src="assets/zinc.webp" alt="锌数据面板图表预览" width="720" height="405" decoding="async">
-          </div>
+          <div class="cover" aria-hidden="true"><span>ZN</span></div>
           <div class="market-body">
             <div>
               <div class="market-title">

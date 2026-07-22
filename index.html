@@ -3,25 +3,33 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="color-scheme" content="dark">
+  <meta name="color-scheme" content="light">
+  <meta name="theme-color" content="#ffffff">
   <title>金属研究 | 铜与锌数据</title>
   <style>
     :root {
-      --canvas: #090a0c;
-      --surface: #111316;
-      --surface-hover: #17191d;
-      --line: #292c31;
-      --line-strong: #3a3e45;
-      --ink: #f5f6f7;
-      --muted: #9ba1aa;
-      --copper: #c77b57;
-      --zinc: #9cabb9;
-      --focus: #7c88e8;
+      --canvas: #ffffff;
+      --surface: #f4f4f4;
+      --surface-hover: #e8e8e8;
+      --ink: #161616;
+      --muted: #525252;
+      --subtle: #8d8d8d;
+      --line: #e0e0e0;
+      --line-strong: #161616;
+      --blue: #0f62fe;
+      --blue-hover: #0050e6;
+      --success: #24a148;
+      --copper: #a84f2a;
+      --zinc: #607787;
+      --content: min(1280px, calc(100% - 64px));
     }
 
     * { box-sizing: border-box; }
 
-    html { background: var(--canvas); }
+    html {
+      min-width: 320px;
+      background: var(--canvas);
+    }
 
     body {
       min-width: 320px;
@@ -29,213 +37,478 @@
       margin: 0;
       color: var(--ink);
       background: var(--canvas);
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", sans-serif;
-      letter-spacing: 0;
+      font-family: "IBM Plex Sans", "Segoe UI", "Microsoft YaHei", Arial, sans-serif;
+      letter-spacing: 0.16px;
     }
 
-    header {
-      height: 56px;
+    .skip-link {
+      position: fixed;
+      z-index: 10;
+      top: 8px;
+      left: 8px;
+      padding: 12px 16px;
+      color: #fff;
+      background: var(--blue);
+      transform: translateY(-80px);
+    }
+
+    .skip-link:focus { transform: translateY(0); }
+
+    .site-header {
+      height: 48px;
       border-bottom: 1px solid var(--line);
+      background: var(--canvas);
     }
 
-    .bar {
-      width: min(1180px, calc(100% - 40px));
+    .header-inner {
+      width: var(--content);
       height: 100%;
       margin: 0 auto;
       display: flex;
       align-items: center;
       justify-content: space-between;
+      gap: 24px;
     }
 
     .brand {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
       font-size: 14px;
-      font-weight: 650;
+      font-weight: 600;
+      line-height: 1;
     }
 
     .brand-mark {
-      width: 8px;
-      height: 8px;
-      border-radius: 2px;
-      background: var(--focus);
+      width: 16px;
+      height: 16px;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2px;
     }
 
-    .bar-note {
+    .brand-mark::before,
+    .brand-mark::after {
+      content: "";
+      background: var(--blue);
+    }
+
+    .status {
+      min-height: 32px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
       color: var(--muted);
       font-size: 12px;
+      white-space: nowrap;
     }
 
-    main {
-      width: min(1180px, calc(100% - 40px));
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      background: var(--success);
+      border-radius: 50%;
+    }
+
+    main { min-height: calc(100vh - 136px); }
+
+    .hero {
+      border-bottom: 1px solid var(--line);
+      background: var(--surface);
+    }
+
+    .hero-inner {
+      width: var(--content);
+      min-height: 212px;
       margin: 0 auto;
-      padding: 64px 0 72px;
+      padding: 32px 0;
+      display: grid;
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      align-items: end;
+      gap: 16px;
     }
 
-    .intro {
-      display: flex;
-      align-items: end;
-      justify-content: space-between;
-      gap: 24px;
-      margin-bottom: 28px;
+    .hero-copy { grid-column: 1 / span 7; }
+
+    .eyebrow {
+      margin: 0 0 20px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.3;
     }
 
     h1 {
+      max-width: 720px;
       margin: 0;
-      font-size: 40px;
-      line-height: 1.15;
-      font-weight: 650;
+      font-size: 52px;
+      font-weight: 300;
+      line-height: 1.12;
       letter-spacing: 0;
     }
 
-    .intro p {
-      margin: 0 0 4px;
-      color: var(--muted);
-      font-size: 14px;
+    .metrics {
+      grid-column: 9 / -1;
+      margin: 0;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      align-self: stretch;
+      border-left: 1px solid var(--line);
     }
+
+    .metric {
+      min-width: 0;
+      padding: 12px 16px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      border-right: 1px solid var(--line);
+    }
+
+    .metric dt {
+      order: 2;
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.35;
+    }
+
+    .metric dd {
+      margin: 0;
+      font-size: 24px;
+      font-weight: 400;
+      line-height: 1;
+      letter-spacing: 0;
+    }
+
+    .catalog {
+      width: var(--content);
+      margin: 0 auto;
+      padding: 32px 0 64px;
+    }
+
+    .catalog-head {
+      min-height: 48px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 24px;
+      border-bottom: 1px solid var(--line-strong);
+    }
+
+    .catalog-head h2,
+    .catalog-head p {
+      margin: 0;
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 1.3;
+    }
+
+    .catalog-head p { color: var(--muted); }
 
     .markets {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 18px;
     }
 
     .market {
       min-width: 0;
-      overflow: hidden;
       color: inherit;
-      background: var(--surface);
+      background: var(--canvas);
       border: 1px solid var(--line);
-      border-radius: 8px;
+      border-top: 0;
       text-decoration: none;
-      transition: background-color 160ms ease, border-color 160ms ease, transform 160ms ease;
+      transition: background-color 160ms ease, border-color 160ms ease;
     }
 
+    .market + .market { border-left: 0; }
+
     .market:hover {
-      background: var(--surface-hover);
+      z-index: 1;
+      background: var(--surface);
       border-color: var(--line-strong);
-      transform: translateY(-2px);
     }
 
     .market:focus-visible {
-      outline: 2px solid var(--focus);
-      outline-offset: 3px;
+      position: relative;
+      z-index: 2;
+      outline: 3px solid var(--blue);
+      outline-offset: -3px;
+    }
+
+    .market-top {
+      min-height: 52px;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      border-bottom: 1px solid var(--line);
+      font-size: 12px;
+      line-height: 1;
+    }
+
+    .market-id {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--muted);
+    }
+
+    .swatch {
+      width: 8px;
+      height: 8px;
+      flex: 0 0 auto;
+    }
+
+    .copper .swatch { background: var(--copper); }
+    .zinc .swatch { background: var(--zinc); }
+
+    .chart-count { color: var(--subtle); }
+
+    .preview-wrap {
+      overflow: hidden;
+      aspect-ratio: 16 / 9;
+      background: var(--surface);
+      border-bottom: 1px solid var(--line);
     }
 
     .preview {
       display: block;
       width: 100%;
-      aspect-ratio: 16 / 9;
+      height: 100%;
       object-fit: cover;
-      border-bottom: 1px solid var(--line);
-      background: #f3f5f7;
+      transition: transform 240ms ease;
     }
+
+    .market:hover .preview { transform: scale(1.012); }
 
     .market-body {
       min-height: 116px;
-      padding: 20px;
+      padding: 20px 16px 20px 24px;
       display: grid;
-      grid-template-columns: auto minmax(0, 1fr) auto;
+      grid-template-columns: minmax(0, 1fr) 48px;
       align-items: center;
-      gap: 14px;
+      gap: 24px;
     }
 
-    .symbol {
-      width: 42px;
-      height: 42px;
-      display: grid;
-      place-items: center;
-      border: 1px solid var(--line-strong);
-      border-radius: 50%;
-      font: 600 14px/1 ui-monospace, "Cascadia Mono", monospace;
+    .market-title {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      min-width: 0;
     }
 
-    .copper .symbol { color: var(--copper); }
-    .zinc .symbol { color: var(--zinc); }
-
-    h2 {
-      margin: 0 0 5px;
-      font-size: 21px;
-      line-height: 1.2;
-      font-weight: 600;
+    .market-title h3 {
+      margin: 0;
+      font-size: 24px;
+      font-weight: 400;
+      line-height: 1.25;
       letter-spacing: 0;
     }
 
+    .market-title span {
+      color: var(--subtle);
+      font-size: 13px;
+    }
+
     .meta {
-      overflow-wrap: anywhere;
+      margin: 8px 0 0;
       color: var(--muted);
       font-size: 13px;
-      line-height: 1.5;
+      line-height: 1.45;
+      overflow-wrap: anywhere;
     }
 
     .arrow {
-      color: var(--muted);
-      font-size: 22px;
+      width: 48px;
+      height: 48px;
+      display: grid;
+      place-items: center;
+      color: #fff;
+      background: var(--blue);
+      font-size: 24px;
       line-height: 1;
-      transition: color 160ms ease, transform 160ms ease;
+      transition: background-color 160ms ease, transform 160ms ease;
     }
 
     .market:hover .arrow {
-      color: var(--ink);
-      transform: translate(2px, -2px);
+      background: var(--blue-hover);
+      transform: translateX(2px);
     }
 
-    @media (max-width: 720px) {
-      .bar, main { width: min(100% - 24px, 620px); }
-      .bar-note { display: none; }
-      main { padding: 40px 0 48px; }
-      .intro { display: block; margin-bottom: 22px; }
-      h1 { font-size: 32px; }
-      .intro p { margin-top: 10px; }
-      .markets { grid-template-columns: 1fr; gap: 14px; }
-      .market-body { min-height: 104px; padding: 16px; }
+    footer {
+      min-height: 88px;
+      color: #c6c6c6;
+      background: var(--ink);
+    }
+
+    .footer-inner {
+      width: var(--content);
+      min-height: 88px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      font-size: 12px;
+    }
+
+    .footer-inner strong {
+      color: #fff;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    @media (max-width: 800px) {
+      :root { --content: min(100% - 32px, 672px); }
+
+      .hero-inner {
+        min-height: 188px;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        align-items: end;
+      }
+
+      .hero-copy { grid-column: 1 / -1; }
+      .eyebrow { margin-bottom: 12px; }
+      h1 { font-size: 40px; }
+
+      .metrics {
+        grid-column: 1 / -1;
+        min-height: 68px;
+        border-top: 1px solid var(--line);
+      }
+
+      .metric { padding: 12px; }
+      .metric dd { font-size: 20px; }
+
+      .catalog { padding: 24px 0 48px; }
+      .markets { grid-template-columns: 1fr; }
+      .market + .market { border-left: 1px solid var(--line); }
+      .market-body { min-height: 104px; }
+    }
+
+    @media (max-width: 480px) {
+      :root { --content: calc(100% - 24px); }
+
+      .status { font-size: 11px; }
+      .hero-inner { padding: 24px 0 20px; }
+      h1 { font-size: 36px; }
+      .metric { padding: 10px 8px; }
+      .metric dt { font-size: 11px; }
+      .metric dd { font-size: 19px; }
+      .catalog-head { min-height: 44px; }
+      .market-top { min-height: 48px; padding: 0 12px; }
+      .market-body { padding: 16px 12px 16px 16px; gap: 12px; }
+      .market-title { display: block; }
+      .market-title h3 { font-size: 21px; }
+      .market-title span { display: block; margin-top: 3px; }
+      .meta { font-size: 12px; }
+      .footer-inner { min-height: 80px; }
     }
 
     @media (prefers-reduced-motion: reduce) {
-      .market, .arrow { transition: none; }
+      .market,
+      .preview,
+      .arrow { transition: none; }
     }
   </style>
 </head>
 <body>
-  <header>
-    <div class="bar">
-      <div class="brand"><span class="brand-mark" aria-hidden="true"></span>YZ Research</div>
-      <div class="bar-note">Metals data desk</div>
+  <a class="skip-link" href="#markets">跳至数据入口</a>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true"></span>
+        <span>YZ Research</span>
+      </div>
+      <div class="status">
+        <span class="status-dot" aria-hidden="true"></span>
+        <span>每日 18:00 更新</span>
+      </div>
     </div>
   </header>
 
   <main>
-    <div class="intro">
-      <h1>金属研究</h1>
-      <p>铜与锌数据面板</p>
-    </div>
-
-    <nav class="markets" aria-label="金属数据面板">
-      <a class="market copper" href="https://yzkkk-study.github.io/Copper/" aria-label="打开铜数据面板">
-        <img class="preview" src="assets/copper.webp" alt="铜数据面板图表预览" width="720" height="405">
-        <div class="market-body">
-          <span class="symbol" aria-hidden="true">Cu</span>
-          <div>
-            <h2>铜数据</h2>
-            <div class="meta">供应 · 下游 · 库存 · 价差 · 持仓 · 进出口</div>
-          </div>
-          <span class="arrow" aria-hidden="true">↗</span>
+    <section class="hero" aria-labelledby="page-title">
+      <div class="hero-inner">
+        <div class="hero-copy">
+          <p class="eyebrow">Base metals research</p>
+          <h1 id="page-title">铜与锌数据研究</h1>
         </div>
-      </a>
 
-      <a class="market zinc" href="https://yzkkk-study.github.io/Zinc/" aria-label="打开锌数据面板">
-        <img class="preview" src="assets/zinc.webp" alt="锌数据面板图表预览" width="720" height="405">
-        <div class="market-body">
-          <span class="symbol" aria-hidden="true">Zn</span>
-          <div>
-            <h2>锌数据</h2>
-            <div class="meta">供应 · 下游 · 库存 · 价差 · 持仓 · 进出口</div>
+        <dl class="metrics" aria-label="数据概览">
+          <div class="metric">
+            <dt>研究品种</dt>
+            <dd>02</dd>
           </div>
-          <span class="arrow" aria-hidden="true">↗</span>
-        </div>
-      </a>
-    </nav>
+          <div class="metric">
+            <dt>图表组</dt>
+            <dd>121</dd>
+          </div>
+          <div class="metric">
+            <dt>日更时间</dt>
+            <dd>18:00</dd>
+          </div>
+        </dl>
+      </div>
+    </section>
+
+    <section class="catalog" aria-labelledby="catalog-title">
+      <div class="catalog-head">
+        <h2 id="catalog-title">数据入口</h2>
+        <p>Copper / Zinc</p>
+      </div>
+
+      <nav class="markets" id="markets" aria-label="金属数据面板">
+        <a class="market copper" href="https://yzkkk-study.github.io/Copper/" aria-label="打开铜数据面板">
+          <div class="market-top">
+            <span class="market-id"><span class="swatch" aria-hidden="true"></span>01 / CU</span>
+            <span class="chart-count">70 图表组</span>
+          </div>
+          <div class="preview-wrap">
+            <img class="preview" src="assets/copper.webp" alt="铜数据面板图表预览" width="720" height="405" decoding="async">
+          </div>
+          <div class="market-body">
+            <div>
+              <div class="market-title">
+                <h3>铜数据面板</h3>
+                <span>Copper</span>
+              </div>
+              <p class="meta">供应 · 下游 · 库存 · 价差 · 持仓 · 进出口</p>
+            </div>
+            <span class="arrow" aria-hidden="true">→</span>
+          </div>
+        </a>
+
+        <a class="market zinc" href="https://yzkkk-study.github.io/Zinc/" aria-label="打开锌数据面板">
+          <div class="market-top">
+            <span class="market-id"><span class="swatch" aria-hidden="true"></span>02 / ZN</span>
+            <span class="chart-count">51 图表组</span>
+          </div>
+          <div class="preview-wrap">
+            <img class="preview" src="assets/zinc.webp" alt="锌数据面板图表预览" width="720" height="405" decoding="async">
+          </div>
+          <div class="market-body">
+            <div>
+              <div class="market-title">
+                <h3>锌数据面板</h3>
+                <span>Zinc</span>
+              </div>
+              <p class="meta">供应 · 下游 · 库存 · 价差 · 持仓 · 进出口</p>
+            </div>
+            <span class="arrow" aria-hidden="true">→</span>
+          </div>
+        </a>
+      </nav>
+    </section>
   </main>
+
+  <footer>
+    <div class="footer-inner">
+      <strong>YZ Research</strong>
+      <span>Copper · Zinc</span>
+    </div>
+  </footer>
 </body>
 </html>
